@@ -28,7 +28,7 @@ export class GasPriceService {
       const gasPrice: GasPrice = await this.getGasPriceFromChain();
       await this.setGasPrice(gasPrice);
 
-      this.logger.log('Successfully updated gas price');
+      this.logger.log('Successfully synchronized gas price');
     } catch (error) {
       this.logger.error(`Failed to update gas price, error: ${error.message}`);
     }

@@ -1,5 +1,12 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiServiceUnavailableResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ExchangeService } from './exchange.service';
 import { ExchangeCalculationParams } from './dto/exchange-calculation-params.dto';
 import { ExchangeCalculationOutput } from './dto/exchange-calculation-output.dto';
@@ -18,7 +25,8 @@ export class ExchangeController {
     type: ExchangeCalculationOutput,
     description: 'The estimated output amount in the smallest unit of the destination token',
   })
-  @ApiNotFoundResponse({ description: 'Pair not found' })
+  @ApiBadRequestResponse({ description: 'Insufficient input amount or liquidity' })
+  @ApiServiceUnavailableResponse({ description: 'Service is unavailable or failed to fetch pair reserves' })
   async getExchangeOutput(@Param() params: ExchangeCalculationParams): Promise<ExchangeCalculationOutput> {
     return this.exchangeService.calculateExchangeOutput(
       params.fromTokenAddress,
